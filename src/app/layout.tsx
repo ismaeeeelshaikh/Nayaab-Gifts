@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Playfair_Display, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/Providers";
@@ -8,7 +8,8 @@ import ClientWrapper from "@/components/ClientWrapper";
 import Script from "next/script";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" });
 
 export const metadata: Metadata = {
   title: "Nayaab Gifts - Personalized Gifts That Define You",
@@ -25,7 +26,8 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          inter.variable
+          outfit.variable,
+          playfair.variable
         )}
       >
         <ThemeProvider

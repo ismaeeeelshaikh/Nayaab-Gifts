@@ -49,9 +49,10 @@ export default async function HomePage() {
         </div>
 
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {featuredProducts.map((product: any) => (
+          {featuredProducts.map((product: any, index: number) => (
             <ProductCard
               key={product.id}
+              index={index}
               id={product.id}
               name={product.name}
               description={product.description}
@@ -73,12 +74,12 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-slate-100 py-20 text-center text-slate-900 border-t border-slate-200">
+      <section className="bg-muted py-20 text-center text-foreground border-t border-border">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
             Ready to Create Something Special?
           </h2>
-          <p className="mx-auto mt-4 max-w-[600px] text-slate-900/90 text-lg">
+          <p className="mx-auto mt-4 max-w-[600px] text-muted-foreground text-lg">
             Join thousands of happy customers who have found the perfect personalized gift.
           </p>
           <div className="mt-8 flex justify-center gap-4">

@@ -75,54 +75,54 @@ export default function CorporateGiftingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-slate-900 text-white py-20 px-4 md:px-6">
+      <section className="bg-slate-900 dark:bg-card text-white py-20 px-4 md:px-6 border-b border-border/40">
         <div className="container mx-auto text-center max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
             Elevate Your Corporate Brand
           </h1>
-          <p className="text-lg md:text-xl text-slate-300 mb-8">
+          <p className="text-lg md:text-xl text-slate-300 dark:text-muted-foreground mb-8">
             Premium custom gifts that leave a lasting impression.
             Perfect for employee recognition, client appreciation, and events.
           </p>
-          <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold" onClick={() => document.getElementById("enquiry-form")?.scrollIntoView({ behavior: "smooth" })}>
+          <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" onClick={() => document.getElementById("enquiry-form")?.scrollIntoView({ behavior: "smooth" })}>
             Request a Quote
           </Button>
         </div>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-16 bg-muted">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Why Partner With Us?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">Why Partner With Us?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+            <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl shadow-sm border border-border/50">
               <div className="h-12 w-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
                 <Zap className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Precision Engraving</h3>
-              <p className="text-slate-600">State-of-the-art laser technology ensures your logo looks perfect on every item.</p>
+              <p className="text-muted-foreground">State-of-the-art laser technology ensures your logo looks perfect on every item.</p>
             </div>
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+            <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl shadow-sm border border-border/50">
               <div className="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
                 <Package className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Volume Discounts</h3>
-              <p className="text-slate-600">Attractive pricing tiers for bulk orders. The more you gift, the more you save.</p>
+              <p className="text-muted-foreground">Attractive pricing tiers for bulk orders. The more you gift, the more you save.</p>
             </div>
-            <div className="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+            <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl shadow-sm border border-border/50">
               <div className="h-12 w-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4">
                 <Truck className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Fast Turnaround</h3>
-              <p className="text-slate-600">Priority processing for corporate clients ensures you never miss a deadline.</p>
+              <p className="text-muted-foreground">Priority processing for corporate clients ensures you never miss a deadline.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats / Trust Banner */}
-      <section className="py-12 bg-white border-y border-slate-100">
-        <div className="container mx-auto px-4 flex flex-wrap justify-center gap-8 md:gap-16 text-slate-500 font-medium">
+      <section className="py-12 bg-background border-y border-border">
+        <div className="container mx-auto px-4 flex flex-wrap justify-center gap-8 md:gap-16 text-muted-foreground font-medium">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="text-green-500 h-5 w-5" />
             <span>Premium Leather Goods</span>
@@ -139,15 +139,15 @@ export default function CorporateGiftingPage() {
       </section>
 
       {/* Enquiry Form */}
-      <section id="enquiry-form" className="py-20 bg-white">
+      <section id="enquiry-form" className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-4">Get a Custom Quote</h2>
-              <p className="text-slate-600">Tell us about your requirements and we'll get back to you within 24 hours.</p>
+              <p className="text-muted-foreground">Tell us about your requirements and we'll get back to you within 24 hours.</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 border border-slate-200 p-8 rounded-2xl bg-white shadow-lg">
+            <form onSubmit={handleSubmit} className="space-y-6 border border-border p-8 rounded-2xl bg-card shadow-lg">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>

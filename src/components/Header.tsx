@@ -17,6 +17,7 @@ import CartIcon from "@/components/CartIcon";
 import SearchBar from "@/components/SearchBar";
 import { Menu, X, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Header() {
   const { data: session } = useSession();
@@ -86,6 +87,7 @@ export default function Header() {
               <span className="sr-only">Wishlist</span>
             </Link>
           </Button>
+          <ThemeToggle />
           <CartIcon />
 
           {session ? (
