@@ -79,7 +79,7 @@ export default function DeveloperPage() {
                             transition={{ delay: 0.5 }}
                             className="text-slate-600 mb-8 leading-relaxed"
                         >
-                            The architect behind Nayaab Gifts. Passionate about crafting pixel-perfect, performant web applications that deliver exceptional user experiences.
+                            The architect behind Nayaab Gifts. Passionate about crafting pixel-perfect, high-performance web applications that deliver exceptional user experiences.
                         </motion.p>
 
                         <motion.div
