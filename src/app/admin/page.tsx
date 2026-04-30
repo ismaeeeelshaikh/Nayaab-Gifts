@@ -176,7 +176,7 @@ export default function AdminDashboard() {
         </Card>
 
         {/* Recent Orders */}
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 min-w-0 overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent Orders</CardTitle>
             <Button asChild variant="ghost" size="sm">

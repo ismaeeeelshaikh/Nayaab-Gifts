@@ -13,12 +13,12 @@ export const sendOtpEmail = async (email: string, code: string, type: "REGISTER"
   console.log("DEBUG: EMAIL_SERVER_PASSWORD present?", !!process.env.EMAIL_SERVER_PASSWORD);
 
   const subject = type === "REGISTER"
-    ? "Verify your email for UM Entreprise"
-    : "Reset your password for UM Entreprise";
+    ? "Verify your email for Nayaab Gifts"
+    : "Reset your password for Nayaab Gifts";
 
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2>${type === "REGISTER" ? "Welcome to UM Entreprise!" : "Password Reset Request"}</h2>
+      <h2>${type === "REGISTER" ? "Welcome to Nayaab Gifts!" : "Password Reset Request"}</h2>
       <p>Use the following code to ${type === "REGISTER" ? "verify your email address" : "reset your password"}:</p>
       <div style="background-color: #f4f4f4; padding: 12px; font-size: 24px; letter-spacing: 4px; font-weight: bold; text-align: center; border-radius: 6px; margin: 20px 0;">
         ${code}

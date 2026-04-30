@@ -41,12 +41,12 @@ export default function Header() {
           <Link href="/" className="flex items-center space-x-2" onClick={closeMenu}>
             <Image
               src="/placeholder.png"
-              alt="UM Entreprise"
-              width={32}
-              height={32}
-              className="object-contain"
+              alt="Nayaab Gifts"
+              width={40}
+              height={40}
+              className="rounded-full"
             />
-            <span className="text-xl font-bold text-primary">UM Entreprise</span>
+            <span className="text-xl font-bold text-primary">Nayaab Gifts</span>
           </Link>
           <nav className="hidden md:flex gap-2">
             <Link

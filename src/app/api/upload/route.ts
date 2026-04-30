@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       cloudinary.uploader
         .upload_stream(
           {
-            folder: "um-entreprise",
+            folder: "nayaab-gifts",
             resource_type: "auto",
           },
           (error, result) => {

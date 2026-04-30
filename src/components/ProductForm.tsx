@@ -38,31 +38,14 @@ const formSchema = z.object({
   category: z.string().min(1, "Category is required"),
   isCustomizable: z.boolean(),
   customizationLabel: z.string().optional(),
-  hasVariants: z.boolean(),
-
-  // Base fields (become optional if hasVariants is true)
-  price: z.string().optional(),
-  images: z.array(z.string()).optional(),
-  stock: z.string().optional(),
-  color: z.string().optional(),
 
   variants: z.array(z.object({
-    color: z.string().min(1, "Color is required"),
+    color: z.string().min(1, "Color/Variant Name is required"),
     colorCode: z.string().optional(),
-    price: z.string().optional(),
+    price: z.string().min(1, "Price is required"),
     stock: z.string().min(1, "Stock is required"),
     images: z.array(z.string()).min(1, "At least one image is required"),
-  })).optional(),
-}).superRefine((data, ctx) => {
-  if (!data.hasVariants) {
-    if (!data.price) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Price is required", path: ["price"] });
-    if (!data.images || data.images.length === 0) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Images are required", path: ["images"] });
-    if (!data.stock) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Stock is required", path: ["stock"] });
-  } else {
-    if (!data.variants || data.variants.length === 0) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "At least one variant is required", path: ["variants"] });
-    }
-  }
+  })).min(1, "At least one variant is required"),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -90,33 +73,30 @@ export default function ProductForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialData
       ? {
-        ...initialData,
-        price: initialData.price ? String(initialData.price) : "",
-        stock: initialData.stock ? String(initialData.stock) : "",
-        color: initialData.color || "",
+        name: initialData.name || "",
+        description: initialData.description || "",
+        category: initialData.category || "",
         isCustomizable: initialData.isCustomizable ?? false,
         customizationLabel: initialData.customizationLabel ?? "",
-        hasVariants: initialData.variants && initialData.variants.length > 0,
-        variants: initialData.variants ? initialData.variants.map((v: any) => ({
-          color: v.color,
-          colorCode: v.colorCode || "",
-          price: v.price ? String(v.price) : "",
-          stock: String(v.stock),
-          images: v.images
-        })) : [],
+        variants: initialData.variants && initialData.variants.length > 0
+          ? initialData.variants.map((v: any) => ({
+              color: v.color,
+              colorCode: v.colorCode || "",
+              price: v.price ? String(v.price) : "",
+              stock: String(v.stock),
+              images: v.images
+            }))
+          : [
+              { color: initialData.color || "Default", price: String(initialData.price || ""), stock: String(initialData.stock || ""), images: initialData.images || [] }
+            ],
       }
       : {
         name: "",
         description: "",
-        price: "",
-        images: [],
         category: "",
-        color: "",
-        stock: "",
         isCustomizable: false,
         customizationLabel: "",
-        hasVariants: false,
-        variants: [],
+        variants: [{ color: "", price: "", stock: "", images: [] }],
       },
   });
 
@@ -124,8 +104,6 @@ export default function ProductForm({
     control: form.control,
     name: "variants",
   });
-
-  const hasVariants = form.watch("hasVariants");
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -137,12 +115,22 @@ export default function ProductForm({
 
       const method = productId ? "PATCH" : "POST";
 
+      const firstVariant = data.variants[0];
+      const payload = {
+        ...data,
+        price: firstVariant.price,
+        stock: firstVariant.stock,
+        color: firstVariant.color,
+        images: firstVariant.images,
+        hasVariants: true,
+      };
+
       const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -176,27 +164,7 @@ export default function ProductForm({
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Images - Only show if NO variants (as variants have their own images) */}
-            {!hasVariants && (
-              <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Images</FormLabel>
-                    <FormControl>
-                      <ImageUpload
-                        value={field.value || []}
-                        disabled={isLoading}
-                        onChange={(urls) => field.onChange(urls)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            {!hasVariants && <Separator />}
+
 
             {/* Basic Info */}
             <div className="grid gap-4 md:grid-cols-2">
@@ -253,89 +221,7 @@ export default function ProductForm({
               )}
             />
 
-            {/* Variants Toggle */}
-            <FormField
-              control={form.control}
-              name="hasVariants"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Does this product have variants?
-                    </FormLabel>
-                    <FormDescription>
-                      Check this if the product comes in multiple colors or options.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            {!hasVariants ? (
-              // SIMPLE PRODUCT FIELDS
-              <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price (₹)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="stock"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Stock</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="color"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Color</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="font-bold"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ) : (
-              // VARIANTS LIST
+            {/* VARIANTS LIST */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <FormLabel className="text-lg font-bold">Product Variants</FormLabel>
@@ -384,7 +270,7 @@ export default function ProductForm({
                           name={`variants.${index}.price`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Price Override (Optional)</FormLabel>
+                              <FormLabel>Price (₹)</FormLabel>
                               <FormControl>
                                 <Input disabled={isLoading} type="number" {...field} />
                               </FormControl>
@@ -434,7 +320,6 @@ export default function ProductForm({
                   </p>
                 )}
               </div>
-            )}
 
             <Separator />
 

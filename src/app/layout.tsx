@@ -11,8 +11,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "UM Entreprise - Personalized Gifts That Define You",
-  description: "Shop custom-engraved wallets, pens, keychains, and more.",
+  title: "Nayaab Gifts - Personalized Gifts That Define You",
+  description: "Discover our premium collection of customizable and personalized gifts, pens, keychains, and more.",
 };
 
 export default function RootLayout({

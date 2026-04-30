@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,22 @@ export default function ImageUpload({
   onChange,
   disabled,
 }: ImageUploadProps) {
+  const valueRef = useRef(value);
+
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
   const onUpload = (result: any) => {
-    onChange([...value, result.info.secure_url]);
+    const nextValues = [...valueRef.current, result.info.secure_url];
+    valueRef.current = nextValues;
+    onChange(nextValues);
   };
 
   const onRemove = (url: string) => {
-    onChange(value.filter((current) => current !== url));
+    const nextValues = valueRef.current.filter((current) => current !== url);
+    valueRef.current = nextValues;
+    onChange(nextValues);
   };
 
   return (
@@ -49,7 +60,7 @@ export default function ImageUpload({
 
       <CldUploadWidget
         onSuccess={onUpload}
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "um-entreprise"}
+        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "nayaab-gifts"}
         options={{
           multiple: true,
           maxFiles: 5

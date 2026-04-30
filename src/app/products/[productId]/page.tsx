@@ -67,7 +67,6 @@ export default function ProductDetailPage() {
         // Auto-select first variant if available
         if (data.variants && data.variants.length > 0) {
           setSelectedVariant(data.variants[0]);
-          initialImages = data.variants[0].images;
         }
 
         if (initialImages && initialImages.length > 0) {
@@ -130,6 +129,13 @@ export default function ProductDetailPage() {
     notFound();
   }
 
+  const currentGalleryImages = Array.from(
+    new Set([
+      ...(product.images || []),
+      ...(selectedVariant?.images || [])
+    ])
+  );
+
   return (
     <div className="container py-10 px-4 md:px-6">
       <div className="grid gap-8 md:grid-cols-2">
@@ -137,7 +143,7 @@ export default function ProductDetailPage() {
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-lg border bg-muted">
             <Image
-              src={selectedImage || (selectedVariant ? selectedVariant.images[0] : product.images[0]) || "/placeholder.png"}
+              src={selectedImage || currentGalleryImages[0] || "/placeholder.png"}
               alt={product.name}
               fill
               className="object-cover"
@@ -145,9 +151,9 @@ export default function ProductDetailPage() {
             />
             <WishlistButton productId={product.id} className="absolute top-4 right-4 scale-125" />
           </div>
-          {(selectedVariant ? selectedVariant.images : product.images).length > 0 && (
+          {currentGalleryImages.length > 0 && (
             <div className="grid grid-cols-4 gap-4">
-              {(selectedVariant ? selectedVariant.images : product.images).map((image, index) => (
+              {currentGalleryImages.map((image, index) => (
                 <div
                   key={index}
                   className={`relative aspect-square cursor-pointer overflow-hidden rounded-lg border-2 transition-all ${selectedImage === image ? "border-primary" : "border-transparent hover:border-muted-foreground"

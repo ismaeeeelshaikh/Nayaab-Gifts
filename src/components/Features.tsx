@@ -32,8 +32,8 @@ export default function Features() {
         <section className="py-20 bg-muted/30">
             <div className="container px-4 md:px-6">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                        Why Choose UM Entreprise?
+                    <h2 className="text-3xl font-bold tracking-tighter md:text-4xl text-center mb-12">
+                        Why Choose Nayaab Gifts?
                     </h2>
                     <p className="mt-4 text-muted-foreground text-lg">
                         Experience the difference with our tailored services.

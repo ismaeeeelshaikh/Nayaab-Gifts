@@ -35,7 +35,7 @@ export default function ShippingPolicyPage() {
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">4. Damages</h2>
                     <p>
-                        UM Entreprise is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim. Please save all packaging materials and damaged goods before filing a claim.
+                        Nayaab Gifts is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim. Please save all packaging materials and damaged goods before filing a claim.
                     </p>
                 </section>
 

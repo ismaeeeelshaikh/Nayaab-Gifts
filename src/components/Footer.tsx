@@ -11,8 +11,8 @@ export default function Footer() {
 
           {/* Column 1: Brand */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">
-              UM Entreprise
+            <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+              Nayaab Gifts
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               Personalized gifts that define you. We craft custom-engraved wallets, pens, and accessories to make every moment specific.
@@ -32,7 +32,7 @@ export default function Footer() {
             <h4 className="font-semibold text-white">Shop</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link href="/products" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/customize" className="hover:text-white transition-colors">Corporate Gifts</Link></li>
+              <li><Link href="/customize" className="hover:text-wide transition-colors">Corporate Gifts</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/profile" className="hover:text-white transition-colors">My Account</Link></li>
             </ul>
@@ -71,11 +71,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-          <div className="flex flex-col md:flex-row gap-2">
-            <p>&copy; {new Date().getFullYear()} UM Entreprise. All rights reserved.</p>
-            <span className="hidden md:inline text-gray-700">|</span>
-            <p>Owner: Mohammed Umar Mohammed Manzar Shaikh</p>
+          <div className="text-center md:text-left text-sm">
+            <p>&copy; {new Date().getFullYear()} Nayaab Gifts. All rights reserved.</p>
           </div>
+          <span className="hidden md:inline text-gray-700">|</span>
+          <p>Owner: Mohammed Umar Mohammed Manzar Shaikh</p>
           <div className="flex gap-1">
             <span>Developed with ❤️ by</span>
             <Link href="/developer" className="font-medium text-white hover:underline">

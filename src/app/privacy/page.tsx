@@ -8,7 +8,7 @@ export default function PrivacyPage() {
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">1. Introduction</h2>
                     <p>
-                        At UM Entreprise, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by UM Entreprise and how we use it.
+                        At Nayaab Gifts, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Nayaab Gifts and how we use it.
                     </p>
                 </section>
 
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">4. Log Files</h2>
                     <p>
-                        UM Entreprise follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics.
+                        Nayaab Gifts follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics.
                     </p>
                 </section>
 

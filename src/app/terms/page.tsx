@@ -8,22 +8,22 @@ export default function TermsPage() {
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">1. Introduction</h2>
                     <p>
-                        Welcome to UM Entreprise! These Terms and Conditions outline the rules and regulations for the use of UM Entreprise's Website.
-                        By accessing this website we assume you accept these terms and conditions. Do not continue to use UM Entreprise if you do not agree to take all of the terms and conditions stated on this page.
+                        Welcome to Nayaab Gifts! These Terms and Conditions outline the rules and regulations for the use of Nayaab Gifts's Website.
+                        By accessing this website we assume you accept these terms and conditions. Do not continue to use Nayaab Gifts if you do not agree to take all of the terms and conditions stated on this page.
                     </p>
                 </section>
 
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">2. License</h2>
                     <p>
-                        Unless otherwise stated, UM Entreprise and/or its licensors own the intellectual property rights for all material on UM Entreprise. All intellectual property rights are reserved. You may access this from UM Entreprise for your own personal use subjected to restrictions set in these terms and conditions.
+                        Unless otherwise stated, Nayaab Gifts and/or its licensors own the intellectual property rights for all material on Nayaab Gifts. All intellectual property rights are reserved. You may access this from Nayaab Gifts for your own personal use subjected to restrictions set in these terms and conditions.
                     </p>
                 </section>
 
                 <section>
                     <h2 className="mb-4 text-xl font-semibold text-foreground">3. User Comments</h2>
                     <p>
-                        Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. UM Entreprise does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of UM Entreprise,its agents and/or affiliates.
+                        Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. Nayaab Gifts does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of Nayaab Gifts,its agents and/or affiliates.
                     </p>
                 </section>
 
