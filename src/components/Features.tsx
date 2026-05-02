@@ -23,7 +23,7 @@ const features = [
     {
         icon: ShieldCheck,
         title: "Secure Payment",
-        description: "100% secure payment processing with Razorpay.",
+        description: "100% secure payment processing with Cashfree.",
     },
 ];
 
