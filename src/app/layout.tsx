@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import ClientWrapper from "@/components/ClientWrapper";
 import Script from "next/script";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" });
@@ -23,21 +24,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-3X1RFELSVG"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-3X1RFELSVG');
-          `}
-        </Script>
-      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -55,6 +41,7 @@ export default function RootLayout({
           <Toaster />
           <WhatsAppButton />
         </ThemeProvider>
+        <GoogleAnalytics />
         {/* ✅ Add Razorpay script - Updated */}
         <Script
           id="razorpay-checkout-js"
@@ -64,4 +51,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+}
