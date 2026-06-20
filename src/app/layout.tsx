@@ -15,6 +15,10 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-headin
 export const metadata: Metadata = {
   title: "Nayaab Gifts - Personalized Gifts That Define You",
   description: "Discover our premium collection of customizable and personalized gifts, pens, keychains, and more.",
+  icons: {
+    icon: "/placeholder.png",
+    apple: "/placeholder.png",
+  },
 };
 
 export default function RootLayout({
