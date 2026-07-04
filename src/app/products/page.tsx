@@ -1,6 +1,17 @@
 import prisma from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import { Prisma } from "@prisma/client";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Products | UM Enterprise",
+  description: "Discover our collection of personalized gifts and customized products. Browse all categories.",
+  openGraph: {
+    title: "Products | UM Enterprise",
+    description: "Discover our collection of personalized gifts and customized products.",
+    type: "website",
+  },
+};
 
 async function getProducts(category?: string, search?: string) {
   const whereClause: Prisma.ProductWhereInput = {};
@@ -22,7 +33,11 @@ async function getProducts(category?: string, search?: string) {
       createdAt: "desc",
     },
     include: {
-      variants: true,
+      variants: {
+        orderBy: {
+          color: "asc",
+        },
+      },
       reviews: {
         select: {
           rating: true

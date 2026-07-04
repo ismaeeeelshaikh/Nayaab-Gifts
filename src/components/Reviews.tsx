@@ -44,21 +44,21 @@ export default function Reviews({ productId }: ReviewsProps) {
     const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
 
     useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await fetch(`/api/products/${productId}/reviews`);
+                if (!response.ok) throw new Error("Failed to fetch reviews");
+                const data = await response.json();
+                setReviews(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         fetchReviews();
     }, [productId]);
-
-    const fetchReviews = async () => {
-        try {
-            const response = await fetch(`/api/products/${productId}/reviews`);
-            if (!response.ok) throw new Error("Failed to fetch reviews");
-            const data = await response.json();
-            setReviews(data);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const startEditing = (review: Review) => {
         setEditingReviewId(review.id);
@@ -180,7 +180,7 @@ export default function Reviews({ productId }: ReviewsProps) {
                     </div>
                 </div>
 
-                {session && !showForm && (
+                {session && !showForm && !reviews.some(r => r.userId === session.user?.id) && (
                     <Button onClick={() => setShowForm(true)}>Write a Review</Button>
                 )}
             </div>
@@ -278,7 +278,7 @@ export default function Reviews({ productId }: ReviewsProps) {
                                             />
                                         ))}
                                     </div>
-                                    <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+                                    <p className="text-foreground leading-relaxed">{review.comment}</p>
 
                                     {review.images.length > 0 && (
                                         <div className="flex gap-2 mt-4 overflow-x-auto pb-2">

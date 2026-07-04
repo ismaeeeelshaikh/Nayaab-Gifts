@@ -23,7 +23,11 @@ export async function GET(request: Request) {
         createdAt: "desc",
       },
       include: {
-        variants: true,
+        variants: {
+          orderBy: {
+            color: "asc",
+          },
+        },
         reviews: {
           select: {
             rating: true

@@ -35,7 +35,7 @@ export default function CartPage() {
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
-            <Card key={item.id}>
+            <Card key={`${item.id}_${item.selectedColor || ""}_${item.customization || ""}`}>
               <CardContent className="p-6">
                 <div className="flex gap-4">
                   {/* Product Image */}
@@ -70,7 +70,7 @@ export default function CartPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.id, item.selectedColor, item.customization)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -83,7 +83,7 @@ export default function CartPage() {
                           variant="outline"
                           size="icon"
                           onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
+                            updateQuantity(item.id, item.quantity - 1, item.selectedColor, item.customization)
                           }
                           disabled={item.quantity <= 1}
                         >
@@ -96,7 +96,7 @@ export default function CartPage() {
                           variant="outline"
                           size="icon"
                           onClick={() =>
-                            updateQuantity(item.id, item.quantity + 1)
+                            updateQuantity(item.id, item.quantity + 1, item.selectedColor, item.customization)
                           }
                         >
                           <Plus className="h-4 w-4" />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,7 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [customization, setCustomization] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -57,23 +58,24 @@ export default function ProductDetailPage() {
       try {
         const response = await fetch(`/api/products/${productId}`);
         if (!response.ok) {
-          notFound();
+          setNotFound(true);
+          return;
         }
         const data = await response.json();
         setProduct(data);
 
-        let initialImages = data.images;
-
-        // Auto-select first variant if available
+        // Auto-select first variant if available and show its images
         if (data.variants && data.variants.length > 0) {
-          setSelectedVariant(data.variants[0]);
-        }
-
-        if (initialImages && initialImages.length > 0) {
-          setSelectedImage(initialImages[0]);
+          const firstVariant = data.variants[0];
+          setSelectedVariant(firstVariant);
+          // Show first variant's image if it has images, otherwise fall back to product images
+          const initialImage = firstVariant.images?.[0] || data.images?.[0];
+          if (initialImage) setSelectedImage(initialImage);
+        } else if (data.images && data.images.length > 0) {
+          setSelectedImage(data.images[0]);
         }
       } catch (error) {
-        notFound();
+        setNotFound(true);
       } finally {
         setLoading(false);
       }
@@ -85,14 +87,20 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (!product) return;
 
+    const currentStock = selectedVariant ? selectedVariant.stock : product.stock;
+    if (currentStock === 0) return;
+    const safeQuantity = Math.min(quantity, currentStock);
+
+    const cartImage = selectedVariant?.images?.[0] || product.images?.[0] || "/placeholder.png";
+
     addItem({
       id: product.id,
       name: product.name,
-      price: selectedVariant?.price || product.price, // Use variant price if available
-      image: selectedVariant ? selectedVariant.images[0] : product.images[0],
-      quantity,
+      price: selectedVariant?.price || product.price,
+      image: cartImage,
+      quantity: safeQuantity,
       customization: product.isCustomizable ? customization : undefined,
-      selectedColor: selectedVariant?.color || undefined, // Add selected color
+      selectedColor: selectedVariant?.color || undefined,
     });
 
     toast({
@@ -104,12 +112,18 @@ export default function ProductDetailPage() {
   const handleBuyNow = () => {
     if (!product) return;
 
+    const currentStock = selectedVariant ? selectedVariant.stock : product.stock;
+    if (currentStock === 0) return;
+    const safeQuantity = Math.min(quantity, currentStock);
+
+    const cartImage = selectedVariant?.images?.[0] || product.images?.[0] || "/placeholder.png";
+
     addItem({
       id: product.id,
       name: product.name,
       price: selectedVariant?.price || product.price,
-      image: selectedVariant ? selectedVariant.images[0] : product.images[0],
-      quantity,
+      image: cartImage,
+      quantity: safeQuantity,
       customization: product.isCustomizable ? customization : undefined,
       selectedColor: selectedVariant?.color || undefined,
     });
@@ -119,34 +133,65 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="container flex min-h-screen items-center justify-center py-10">
-        <p>Loading...</p>
+      <div className="container py-10 px-4 md:px-6">
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Image skeleton */}
+          <div className="space-y-4">
+            <div className="relative aspect-square rounded-lg bg-muted animate-pulse" />
+            <div className="grid grid-cols-4 gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="aspect-square rounded-lg bg-muted animate-pulse" />
+              ))}
+            </div>
+          </div>
+          {/* Details skeleton */}
+          <div className="space-y-6">
+            <div>
+              <div className="h-6 w-24 bg-muted animate-pulse rounded mb-2" />
+              <div className="h-9 w-3/4 bg-muted animate-pulse rounded mb-2" />
+              <div className="h-8 w-28 bg-muted animate-pulse rounded" />
+            </div>
+            <div className="h-px bg-muted" />
+            <div className="space-y-2">
+              <div className="h-5 w-full bg-muted animate-pulse rounded" />
+              <div className="h-5 w-5/6 bg-muted animate-pulse rounded" />
+              <div className="h-5 w-2/3 bg-muted animate-pulse rounded" />
+            </div>
+            <div className="h-12 w-full bg-muted animate-pulse rounded" />
+            <div className="h-12 w-full bg-muted animate-pulse rounded" />
+          </div>
+        </div>
       </div>
     );
   }
 
-  if (!product) {
-    notFound();
+  if (notFound || !product) {
+    return (
+      <div className="container flex min-h-[60vh] flex-col items-center justify-center py-10">
+        <h1 className="text-4xl font-bold">Product Not Found</h1>
+        <p className="mt-2 text-muted-foreground">The product you're looking for doesn't exist or has been removed.</p>
+        <Button className="mt-6" onClick={() => router.push("/products")}>Browse Products</Button>
+      </div>
+    );
   }
 
-  const currentGalleryImages = Array.from(
-    new Set([
-      ...(product.images || []),
-      ...(selectedVariant?.images || [])
-    ])
-  );
+  // Show only the selected variant's images, or fall back to product images
+  const currentGalleryImages = selectedVariant && selectedVariant.images.length > 0
+    ? selectedVariant.images
+    : (product.images || []);
 
   return (
     <div className="container py-10 px-4 md:px-6">
       <div className="grid gap-8 md:grid-cols-2">
         {/* Images */}
         <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-lg border bg-muted">
+          <div className="relative aspect-square overflow-hidden rounded-lg border bg-muted group">
             <Image
               src={selectedImage || currentGalleryImages[0] || "/placeholder.png"}
               alt={product.name}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
             <WishlistButton productId={product.id} className="absolute top-4 right-4 scale-125" />
@@ -165,6 +210,7 @@ export default function ProductDetailPage() {
                     alt={`${product.name} ${index + 1}`}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 12vw"
                   />
                 </div>
               ))}
@@ -182,6 +228,11 @@ export default function ProductDetailPage() {
             <p className="mt-2 text-2xl font-bold">
               ₹{(selectedVariant?.price || product.price).toFixed(2)}
             </p>
+            {(selectedVariant ? selectedVariant.stock : product.stock) === 0 && (
+              <Badge variant="destructive" className="mt-2 text-sm">
+                Out of Stock
+              </Badge>
+            )}
           </div>
 
           <Separator />
@@ -196,9 +247,10 @@ export default function ProductDetailPage() {
                     key={variant.id}
                     onClick={() => {
                       setSelectedVariant(variant);
-                      if (variant.images.length > 0) {
-                        setSelectedImage(variant.images[0]);
-                      }
+                      // Switch to the new variant's first image, or product's first image
+                      setSelectedImage(variant.images?.[0] || product.images?.[0] || "");
+                      // Reset quantity if it exceeds new variant's stock
+                      if (quantity > variant.stock) setQuantity(Math.max(1, variant.stock));
                     }}
                     className={`
                         relative px-4 py-2 rounded-md border text-sm font-medium transition-all
@@ -251,7 +303,10 @@ export default function ProductDetailPage() {
                 id="quantity"
                 type="number"
                 value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                onChange={(e) => {
+                  const stock = selectedVariant ? selectedVariant.stock : product.stock;
+                  setQuantity(Math.max(1, Math.min(stock, parseInt(e.target.value) || 1)));
+                }}
                 className="w-20 text-center"
                 min="1"
                 max={selectedVariant ? selectedVariant.stock : product.stock}
@@ -281,6 +336,7 @@ export default function ProductDetailPage() {
             </Button>
             <Button
               size="lg"
+              variant="outline"
               className="w-full"
               disabled={(selectedVariant ? selectedVariant.stock : product.stock) === 0}
               onClick={handleBuyNow}

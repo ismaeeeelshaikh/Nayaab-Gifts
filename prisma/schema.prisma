@@ -285,8 +285,3 @@ model Coupon {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
-
-// Order model updates
-// Note: Manually added fields to the existing Order model in the schema below or rely on the user to check the Order model definition.
-// Wait, I must edit the Order model definition earlier in the file, not append it here.
-// I will use multi_replace for this to do it in one go.

@@ -30,10 +30,8 @@ export default function SimilarProducts({ currentProductId, currentProductName, 
     useEffect(() => {
         async function fetchProducts() {
             try {
-                // Fetch latest 50 products to find similar items across categories (handles category typos)
-                const res = await fetch(`/api/products?limit=50&t=${Date.now()}`, {
-                    cache: 'no-store'
-                });
+                // Fetch same-category products with a small limit (server-side filtering)
+                const res = await fetch(`/api/products?category=${encodeURIComponent(category)}&limit=10`);
                 if (!res.ok) throw new Error("Failed to fetch");
 
                 const data: Product[] = await res.json();

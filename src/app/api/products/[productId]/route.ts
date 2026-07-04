@@ -14,7 +14,11 @@ export async function GET(
         id: productId,
       },
       include: {
-        variants: true,
+        variants: {
+          orderBy: {
+            color: "asc",
+          },
+        },
       },
     });
 

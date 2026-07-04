@@ -59,9 +59,17 @@ export async function POST(
             return new NextResponse("Comment is required", { status: 400 });
         }
 
-        // Check if user has already reviewed? (Optional logic, skipping for now to allow multiple reviews if they want, or simple implementation)
-        // Detailed implementation: Check if user actually bought the product?
-        // For now, let's keep it open to any authenticated user to reduce friction, or as per "Verified Purchase" tag later.
+        // Check if user has already reviewed this product
+        const existingReview = await prisma.review.findFirst({
+            where: {
+                productId: productId,
+                userId: session.user.id,
+            },
+        });
+
+        if (existingReview) {
+            return new NextResponse("You have already reviewed this product. You can edit your existing review instead.", { status: 400 });
+        }
 
         const review = await prisma.review.create({
             data: {

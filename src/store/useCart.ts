@@ -11,11 +11,16 @@ export interface CartItem {
   selectedColor?: string;
 }
 
+// Generate a unique key for each cart item based on product id + color + customization
+function getCartItemKey(item: { id: string; selectedColor?: string; customization?: string }): string {
+  return `${item.id}_${item.selectedColor || ""}_${item.customization || ""}`;
+}
+
 interface CartStore {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, selectedColor?: string, customization?: string) => void;
+  updateQuantity: (id: string, quantity: number, selectedColor?: string, customization?: string) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
   getTotalItems: () => number;
@@ -28,16 +33,13 @@ export const useCart = create<CartStore>()(
 
       addItem: (item) => {
         const items = get().items;
-        const existingItem = items.find((i) =>
-          i.id === item.id &&
-          i.selectedColor === item.selectedColor &&
-          i.customization === item.customization
-        );
+        const itemKey = getCartItemKey(item);
+        const existingItem = items.find((i) => getCartItemKey(i) === itemKey);
 
         if (existingItem) {
           set({
             items: items.map((i) =>
-              (i.id === item.id && i.selectedColor === item.selectedColor && i.customization === item.customization)
+              getCartItemKey(i) === itemKey
                 ? { ...i, quantity: i.quantity + (item.quantity || 1) }
                 : i
             ),
@@ -49,18 +51,20 @@ export const useCart = create<CartStore>()(
         }
       },
 
-      removeItem: (id) => {
-        set({ items: get().items.filter((i) => i.id !== id) });
+      removeItem: (id, selectedColor, customization) => {
+        const key = getCartItemKey({ id, selectedColor, customization });
+        set({ items: get().items.filter((i) => getCartItemKey(i) !== key) });
       },
 
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (id, quantity, selectedColor, customization) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          get().removeItem(id, selectedColor, customization);
           return;
         }
+        const key = getCartItemKey({ id, selectedColor, customization });
         set({
           items: get().items.map((i) =>
-            i.id === id ? { ...i, quantity } : i
+            getCartItemKey(i) === key ? { ...i, quantity } : i
           ),
         });
       },

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useWishlist } from "@/store/useWishlist";
 
 interface WishlistButtonProps {
     productId: string;
@@ -18,28 +19,14 @@ export default function WishlistButton({ productId, className }: WishlistButtonP
     const { toast } = useToast();
     const router = useRouter();
 
-    const [isWishlisted, setIsWishlisted] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const { wishlistedIds, fetchWishlist, isFetching, hasFetched, toggleItem } = useWishlist();
+    const isWishlisted = wishlistedIds.includes(productId);
 
     useEffect(() => {
-        if (session) {
-            checkWishlistStatus();
-        } else {
-            setLoading(false);
+        if (session && !hasFetched && !isFetching) {
+            fetchWishlist();
         }
-    }, [session, productId]);
-
-    const checkWishlistStatus = async () => {
-        try {
-            const response = await fetch(`/api/user/wishlist/check?productId=${productId}`);
-            const data = await response.json();
-            setIsWishlisted(data.isWishlisted);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [session, hasFetched, isFetching, fetchWishlist]);
 
     const toggleWishlist = async (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent linking to product page if button is on a card
@@ -55,33 +42,18 @@ export default function WishlistButton({ productId, className }: WishlistButtonP
             return;
         }
 
-        // Optimistic UI update
-        const previousState = isWishlisted;
-        setIsWishlisted(!previousState);
+        // Optimistic UI update handled by store
 
         try {
-            const response = await fetch("/api/user/wishlist", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ productId }),
-            });
-
-            if (!response.ok) throw new Error("Failed");
-
-            const data = await response.json();
-
+            const finalState = await toggleItem(productId);
+            
             toast({
-                title: data.isWishlisted ? "Added to Wishlist" : "Removed from Wishlist",
-                description: data.isWishlisted
+                title: finalState ? "Added to Wishlist" : "Removed from Wishlist",
+                description: finalState
                     ? "This item has been saved for later."
                     : "This item has been removed from your list.",
             });
-
-            setIsWishlisted(data.isWishlisted);
-
         } catch (error) {
-            // Revert on error
-            setIsWishlisted(previousState);
             toast({
                 title: "Error",
                 description: "Something went wrong. Please try again.",
@@ -90,8 +62,8 @@ export default function WishlistButton({ productId, className }: WishlistButtonP
         }
     };
 
-    if (loading) {
-        return <div className="h-9 w-9" />; // Placeholder size
+    if (session && !hasFetched) {
+        return <div className="h-9 w-9 bg-muted/50 rounded-full animate-pulse z-10" />; // Placeholder size
     }
 
     return (
