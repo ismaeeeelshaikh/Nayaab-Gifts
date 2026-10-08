@@ -127,7 +127,7 @@ export default function AboutPage() {
                   <Mail className="h-6 w-6 text-primary shrink-0" />
                   <div>
                     <h3 className="font-semibold text-lg">Email</h3>
-                    <p className="text-slate-300">entrepriseum@gmail.com</p>
+                    <p className="text-slate-300">founder@nayaabgifts.me</p>
                   </div>
                 </div>
               </div>
